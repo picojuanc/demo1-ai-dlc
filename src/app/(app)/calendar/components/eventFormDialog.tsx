@@ -106,6 +106,19 @@ export function EventFormDialog({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allDay]);
 
+  // Validación cross-field (R3.6): cuando cambia un extremo del rango,
+  // RHF sólo revalida ese campo y no propaga el error de Zod superRefine
+  // al otro. Forzamos `trigger` sobre el extremo dependiente.
+  useEffect(() => {
+    const sub = form.watch((_, { name, type }) => {
+      if (type !== "change") return;
+      if (name === "start") void form.trigger("end");
+      else if (name === "end") void form.trigger("start");
+      else if (name === "allDay") void form.trigger(["start", "end"]);
+    });
+    return () => sub.unsubscribe();
+  }, [form]);
+
   const handleValid = async (values: EventInput): Promise<void> => {
     if (!mode) return;
     const closed = await onSubmit(values, mode);

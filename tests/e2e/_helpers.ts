@@ -5,16 +5,36 @@ import { expect, type Page } from "@playwright/test";
 
 export const STORAGE_KEY = "dad_events_v1";
 
-export async function gotoCleanCalendar(page: Page): Promise<void> {
-  await page.addInitScript(() => {
+export interface SeedEvent {
+  id: string;
+  title: string;
+  start: string;
+  end: string;
+  allDay: boolean;
+  status: "done" | "not-done";
+  createdAt: string;
+  updatedAt: string;
+}
+
+export async function gotoCleanCalendar(page: Page, seed?: SeedEvent[]): Promise<void> {
+  // Navegamos primero (origen disponible) y sembramos con `evaluate`
+  // para que persista a través de `page.reload()`. `addInitScript` se
+  // re-ejecuta en cada navegación y aplastaría cambios del test.
+  await page.goto("/calendar");
+  await page.evaluate((payload) => {
     try {
       window.localStorage.clear();
+      if (payload) {
+        window.localStorage.setItem(
+          "dad_events_v1",
+          JSON.stringify({ version: 1, events: payload }),
+        );
+      }
     } catch {
       // ignore (Safari incógnito, etc.)
     }
-  });
-  await page.goto("/calendar");
-  // Esperar a que el hook de disponibilidad termine y renderice el grid.
+  }, seed ?? null);
+  await page.reload();
   await expect(page.getByRole("grid", { name: /Calendario,/ })).toBeVisible();
 }
 
@@ -68,4 +88,26 @@ export async function submitCreate(page: Page): Promise<void> {
 
 export function gridCell(page: Page, day: string) {
   return page.locator(`[data-day="${day}"]`);
+}
+
+export async function openEditDialog(page: Page, title: string): Promise<void> {
+  await page.getByRole("button", { name: `Editar ${title}` }).click();
+  await expect(page.getByRole("dialog", { name: "Editar evento" })).toBeVisible();
+}
+
+export async function openDeleteDialog(page: Page, title: string): Promise<void> {
+  await page.getByRole("button", { name: `Borrar ${title}` }).click();
+  await expect(page.getByRole("alertdialog")).toBeVisible();
+}
+
+export async function submitEdit(page: Page): Promise<void> {
+  await page.getByRole("button", { name: "Guardar cambios" }).click();
+  await expect(page.getByText("Cambios guardados")).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Editar evento" })).toBeHidden();
+}
+
+export function nowIso(): string {
+  const d = new Date();
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
