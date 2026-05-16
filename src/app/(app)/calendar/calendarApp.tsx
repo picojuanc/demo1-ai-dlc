@@ -1,13 +1,14 @@
 "use client";
 
 import { addMonths, startOfMonth } from "date-fns";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import type { Event } from "@/domain/events/entities";
 import type { EventStoreError } from "@/domain/events/errors";
-import { getListEvents } from "@/composition";
+import { getListEvents, getToggleEventStatus } from "@/composition";
 import { useLocalStorageAvailability } from "@/lib/hooks/useLocalStorageAvailability";
 
+import { DayPanel } from "./components/dayPanel";
 import { LocalStorageUnavailable } from "./components/localStorageUnavailable";
 import { MonthGrid } from "./components/monthGrid";
 import { MonthHeader } from "./components/monthHeader";
@@ -52,6 +53,20 @@ function CalendarMain(): React.ReactElement {
     };
   }, []);
 
+  const handleToggle = useCallback(async (event: Event) => {
+    const result = await getToggleEventStatus()(event);
+    if (result.ok) {
+      setEvents((prev) => prev.map((e) => (e.id === result.value.id ? result.value : e)));
+    } else {
+      setLoadError(result.error);
+    }
+  }, []);
+
+  // T10 conectará estos handlers a los diálogos de crear/editar/borrar.
+  const handleEdit = useCallback((_event: Event) => {}, []);
+  const handleDelete = useCallback((_event: Event) => {}, []);
+  const handleAddEvent = useCallback((_day: string) => {}, []);
+
   return (
     <main role="main" className="container mx-auto flex min-h-screen flex-col gap-4 p-4 md:p-8">
       {loadError && <LoadErrorBanner error={loadError} />}
@@ -68,6 +83,14 @@ function CalendarMain(): React.ReactElement {
         today={today}
         onSelectDay={setSelectedDay}
         onChangeVisibleMonth={setVisibleMonth}
+      />
+      <DayPanel
+        selectedDay={selectedDay}
+        events={events}
+        onToggle={handleToggle}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+        onAddEvent={handleAddEvent}
       />
     </main>
   );
