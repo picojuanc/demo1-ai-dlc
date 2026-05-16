@@ -20,6 +20,9 @@ dist/
 build/
 coverage/
 
+# TypeScript build cache
+*.tsbuildinfo
+
 # Playwright
 test-results/
 playwright-report/
