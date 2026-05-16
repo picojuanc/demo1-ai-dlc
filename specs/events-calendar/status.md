@@ -15,9 +15,9 @@
 
 ## State
 
-- **state**: `in-progress`
-- **fase**: T1–T16 done. Implementación completa, todos los tests
-  verdes, cobertura cumpliendo umbrales. Próximo paso: abrir PR (G4).
+- **state**: `partial-deploy-pruebas`
+- **fase**: G4 firmado, merge a `pruebas` (PR #1). Próximo paso:
+  `/spec-promote` para subir a `qa` (G5).
 
 > Valores válidos del lifecycle (§6 methodology):
 > `not-started` → `spec-in-review` → `spec-approved` →
@@ -31,7 +31,7 @@
 | ---- | ---------------------------------------- | ---------------------- | ------------------------------------------------------------------------- |
 | G2   | Feature spec (`requirements.md`)         | tech lead              | ✅ signed 2026-05-16 by jpico@syc.com.co (commit 1d43491)                 |
 | G3   | Plan / Design (`design.md` + `tasks.md`) | tech lead              | ✅ signed 2026-05-16 by jpico@syc.com.co (design c0fd6b7 + tasks 20ff8f7) |
-| G4   | PR de código                             | 1+ reviewer del equipo | pending                                                                   |
+| G4   | PR de código                             | 1+ reviewer del equipo | ✅ signed 2026-05-16 — PR #1 merged to `pruebas` (merge commit 56e3843)   |
 | G5   | Pre-deploy a prod                        | Ops                    | pending                                                                   |
 | G6   | Rollout                                  | Ops + tech lead        | pending                                                                   |
 | G7   | Bug triage (post-rollout)                | tech lead              | N/A hasta rollout                                                         |
@@ -96,16 +96,11 @@ _Ninguna._
 
 ## Próximo paso sugerido
 
-**T1–T16 done.** Implementación completa. Tests:
+**T1–T16 done + G4 firmado.** Feature en `pruebas`.
 
-- Unit + integration: 71/71 ✅
-- E2E + a11y: 29/29 ✅
-- Coverage: 100% stmts/funcs/lines, 93% branch (umbrales cumplidos).
-
-**Próximo paso**: abrir **PR de código (G4)** desde
-`feat/events-calendar` → `pruebas` para review humano. Tras G4 firmado
-y merge a `pruebas`, `state` puede avanzar a `partial-deploy-pruebas`
-(§6 lifecycle).
+**Próximo paso**: `/spec-promote` para abrir PR de promoción
+`pruebas` → `qa` (G5 — pre-deploy a prod, firmante Ops). El skill
+verifica que la suite siga verde sobre `pruebas` antes de armar el PR.
 
 Tras T11–T15, queda **T16** (verificación de cobertura ≥80% global,
 ≥90% en `domain/` y `application/`). Cada task sigue el flujo:
