@@ -29,7 +29,7 @@
 | Gate | Descripción | Firmante | Estado |
 |---|---|---|---|
 | G2 | Feature spec (`requirements.md`) | tech lead | ✅ signed 2026-05-16 by jpico@syc.com.co (commit 1d43491) |
-| G3 | Plan / Design (`design.md` + `tasks.md`) | tech lead | **pending** (design listo en commit c0fd6b7; tasks.md pendiente hasta firmar G3) |
+| G3 | Plan / Design (`design.md` + `tasks.md`) | tech lead | 🟡 partial — design firmado 2026-05-16 by jpico@syc.com.co (commit c0fd6b7). `tasks.md` pendiente; re-firma necesaria para cerrar el gate. |
 | G4 | PR de código | 1+ reviewer del equipo | pending |
 | G5 | Pre-deploy a prod | Ops | pending |
 | G6 | Rollout | Ops + tech lead | pending |
@@ -60,6 +60,7 @@ _No hay tasks todavía. Se poblarán tras la firma de `design.md` (G3)._
 | 2026-05-16 | OQ-1 resuelta | Opción (a) — bloquear app y mostrar mensaje. Materializada en R1.4. G2 desbloqueado. |
 | 2026-05-16 | G2 firmado | requirements.md aprobado por jpico@syc.com.co sobre commit 1d43491. state → spec-approved. |
 | 2026-05-16 | design.md completo | DEC-1..DEC-5 cerrados en entrevista. Tabla de tests por R*.* mapeada a archivos. G3 ready for sign. |
+| 2026-05-16 | G3 firma parcial (design) | design.md aprobado por jpico@syc.com.co sobre commit c0fd6b7. State **NO** avanza hasta poblar tasks.md y re-firmar. |
 
 ## Próximo paso sugerido
 
