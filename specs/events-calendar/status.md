@@ -16,7 +16,7 @@
 ## State
 
 - **state**: `in-progress`
-- **fase**: ejecución de tasks. T1–T8 done; T9 en cola.
+- **fase**: ejecución de tasks. T1–T9 done; T10 en cola.
 
 > Valores válidos del lifecycle (§6 methodology):
 > `not-started` → `spec-in-review` → `spec-approved` →
@@ -56,7 +56,7 @@ _Ninguna._
 | T6  | Composition root + useLocalStorageAvailability                         | ✅ done | f1dc6b9 | R1.4                                    |
 | T7  | UI shell + componente bloqueo R1.4                                     | ✅ done | 3058301 | R1.4, R5.1                              |
 | T8  | UI vista mensual (monthHeader + monthGrid)                             | ✅ done | 8efcefb | R2.1, R2.3, R2.4, R5.1, R5.2            |
-| T9  | UI panel del día (dayPanel + eventRow)                                 | pending | —       | R2.2, R4.3, R5.1, R5.2                  |
+| T9  | UI panel del día (dayPanel + eventRow)                                 | ✅ done | 4668746 | R2.2, R4.3, R5.1, R5.2                  |
 | T10 | UI formularios (eventFormDialog + deleteEventDialog)                   | pending | —       | R3.x, R4.1, R4.2, R5.1, R5.2            |
 | T11 | E2E creación 4 tipos                                                   | pending | —       | R3.1–R3.4                               |
 | T12 | E2E editar, borrar, toggle, validaciones                               | pending | —       | R3.5, R3.6, R4.1–R4.3                   |
@@ -84,6 +84,7 @@ _Ninguna._
 | 2026-05-16 | T6 done                   | Composition root `getEventStore()` (cacheado, fail-fast en SSR) y hook `useLocalStorageAvailability` (`null → boolean` tras `useEffect`). 2 tests con `renderHook` de RTL. 71/71 total. commit f1dc6b9.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | 2026-05-16 | T7 done                   | Capa Presentation iniciada: `app/(app)/calendar/page.tsx` (RSC, metadata "Calendario"), `calendarApp.tsx` (isla cliente que decide skeleton/bloqueo/placeholder) y `components/localStorageUnavailable.tsx` (main landmark, h1 focuseable, mensaje español). Smoke test dev server: `/calendar` → HTTP 200, title y skeleton SSR correctos. `pnpm build` verde. commit 3058301.                                                                                                                                                                                                                                                                                                                                                                              |
 | 2026-05-16 | T8 done                   | UI vista mensual: `monthHeader` (prev/Hoy/sig con `aria-label`, título capitalizado en español, `aria-live=polite` para anuncios al cambiar mes) + `monthGrid` (`<table role=grid>`, semana-lunes, roving tabindex, soporte completo de teclado: flechas / Home·End / PageUp·PageDown / Enter·Espacio, `aria-current=date`, `aria-selected`, eventos multi-día por celda via `eventInDay`). `calendarApp` orquesta state (today/visibleMonth/selectedDay/events/loadError) y `LoadErrorBanner` mapea `EventStoreError` a mensajes UI (design §6). `getListEvents` agregado a composition. `pnpm build` verde (`/calendar` 33 kB). Smoke dev verifica solo path skeleton; el grid se valida visual/E2E en T13/T15. 71/71 tests siguen verdes. commit 8efcefb. |
+| 2026-05-16 | T9 done                   | UI panel del día: `dayPanel` (section landmark, heading con fecha completa en español, lista ordenada allDay→cronológico, empty states para "no day selected" y "día sin eventos", botón "+ Nuevo evento") + `eventRow` (checkbox done con label asociada, time range etiquetado por `eventKind` — "Todo el día" / "HH:mm–HH:mm" / multi-día con fechas, botones Editar/Borrar con `aria-label` específico). `handleToggle` en `calendarApp` llama `getToggleEventStatus()` y actualiza events. Handlers de edit/delete/add son stubs no-op (T10 los conecta a diálogos). `nowIso` helper agregado a composition. `pnpm build` verde (`/calendar` 34 kB). 71/71 tests. commit 4668746.                                                                       |
 
 ## Próximo paso sugerido
 
