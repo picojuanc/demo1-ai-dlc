@@ -1,7 +1,7 @@
 "use client";
 
 import { addMonths, startOfMonth } from "date-fns";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import type { Event } from "@/domain/events/entities";
@@ -55,6 +55,17 @@ function CalendarMain(): React.ReactElement {
   const [formMode, setFormMode] = useState<EventFormMode | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<Event | null>(null);
 
+  // Radix Dialog controlado por estado (sin DialogTrigger) no restaura
+  // el foco al cerrarse. Guardamos el elemento que abrió el diálogo y
+  // lo refocuseamos en onOpenChange (R5.1, R5.2 — devolución de foco).
+  const triggerRef = useRef<HTMLElement | null>(null);
+  const captureTrigger = () => {
+    triggerRef.current = document.activeElement as HTMLElement | null;
+  };
+  const restoreTrigger = () => {
+    queueMicrotask(() => triggerRef.current?.focus());
+  };
+
   useEffect(() => {
     let cancelled = false;
     void getListEvents()().then((result) => {
@@ -77,14 +88,17 @@ function CalendarMain(): React.ReactElement {
   }, []);
 
   const handleAddEvent = useCallback((day: string) => {
+    captureTrigger();
     setFormMode({ kind: "create", defaultDay: day });
   }, []);
 
   const handleEdit = useCallback((event: Event) => {
+    captureTrigger();
     setFormMode({ kind: "edit", event });
   }, []);
 
   const handleDelete = useCallback((event: Event) => {
+    captureTrigger();
     setDeleteTarget(event);
   }, []);
 
@@ -164,7 +178,10 @@ function CalendarMain(): React.ReactElement {
         open={formMode !== null}
         mode={formMode}
         onOpenChange={(open) => {
-          if (!open) setFormMode(null);
+          if (!open) {
+            setFormMode(null);
+            restoreTrigger();
+          }
         }}
         onSubmit={handleSubmitForm}
       />
@@ -172,7 +189,10 @@ function CalendarMain(): React.ReactElement {
         open={deleteTarget !== null}
         event={deleteTarget}
         onOpenChange={(open) => {
-          if (!open) setDeleteTarget(null);
+          if (!open) {
+            setDeleteTarget(null);
+            restoreTrigger();
+          }
         }}
         onConfirm={handleConfirmDelete}
       />

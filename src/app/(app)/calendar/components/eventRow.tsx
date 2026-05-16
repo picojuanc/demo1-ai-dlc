@@ -3,6 +3,7 @@
 import { format, parseISO } from "date-fns";
 import { es } from "date-fns/locale";
 
+import { Button } from "@/components/ui/button";
 import type { Event } from "@/domain/events/entities";
 import { eventKind } from "@/domain/events/helpers";
 import { cn } from "@/lib/utils";
@@ -65,22 +66,24 @@ export function EventRow({ event, onToggle, onEdit, onDelete }: EventRowProps): 
         <span className="sr-only">{done ? "Marcar como pendiente" : "Marcar como hecho"}</span>
       </label>
       <div className="flex gap-1">
-        <button
+        <Button
           type="button"
+          variant="outline"
+          size="sm"
           onClick={() => onEdit(event)}
           aria-label={`Editar ${event.title}`}
-          className="rounded-md border border-input bg-background px-2 py-1 text-xs font-medium hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           Editar
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
+          variant="destructive"
+          size="sm"
           onClick={() => onDelete(event)}
           aria-label={`Borrar ${event.title}`}
-          className="rounded-md border border-destructive/40 bg-background px-2 py-1 text-xs font-medium text-destructive hover:bg-destructive/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive"
         >
           Borrar
-        </button>
+        </Button>
       </div>
     </li>
   );
