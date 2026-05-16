@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+# Usa npx --no-install para evitar requerir pnpm en el PATH del subprocess
+# de git (los hooks no heredan PATH del shell interactivo).
+npx --no-install lint-staged
