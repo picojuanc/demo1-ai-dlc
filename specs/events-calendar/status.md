@@ -16,7 +16,7 @@
 ## State
 
 - **state**: `in-progress`
-- **fase**: ejecución de tasks. T1–T11 done. Pendiente T12–T15 (E2E + a11y) y T16 (cierre).
+- **fase**: ejecución de tasks. T1–T12 done. Pendiente T13–T15 (E2E + a11y) y T16 (cierre).
 
 > Valores válidos del lifecycle (§6 methodology):
 > `not-started` → `spec-in-review` → `spec-approved` →
@@ -59,7 +59,7 @@ _Ninguna._
 | T9  | UI panel del día (dayPanel + eventRow)                                 | ✅ done | 4668746 | R2.2, R4.3, R5.1, R5.2                  |
 | T10 | UI formularios (eventFormDialog + deleteEventDialog)                   | ✅ done | 92719bd | R3.1–R3.6, R4.1, R4.2, R5.1, R5.2       |
 | T11 | E2E creación 4 tipos                                                   | ✅ done | 53d87a1 | R3.1, R3.2, R3.3, R3.4                  |
-| T12 | E2E editar, borrar, toggle, validaciones                               | pending | —       | R3.5, R3.6, R4.1–R4.3                   |
+| T12 | E2E editar, borrar, toggle, validaciones                               | ✅ done | f88476f | R3.5, R3.6, R4.1, R4.2, R4.3            |
 | T13 | E2E navegación + panel + multi-día                                     | pending | —       | R2.1–R2.4                               |
 | T14 | E2E bloqueo R1.4                                                       | pending | —       | R1.4                                    |
 | T15 | E2E accessibility (teclado + axe)                                      | pending | —       | R5.1, R5.2                              |
@@ -87,13 +87,13 @@ _Ninguna._
 | 2026-05-16 | T9 done                   | UI panel del día: `dayPanel` (section landmark, heading con fecha completa en español, lista ordenada allDay→cronológico, empty states para "no day selected" y "día sin eventos", botón "+ Nuevo evento") + `eventRow` (checkbox done con label asociada, time range etiquetado por `eventKind` — "Todo el día" / "HH:mm–HH:mm" / multi-día con fechas, botones Editar/Borrar con `aria-label` específico). `handleToggle` en `calendarApp` llama `getToggleEventStatus()` y actualiza events. Handlers de edit/delete/add son stubs no-op (T10 los conecta a diálogos). `nowIso` helper agregado a composition. `pnpm build` verde (`/calendar` 34 kB). 71/71 tests. commit 4668746.                                                                                                                                                                     |
 | 2026-05-16 | T10 done                  | UI formularios + mutaciones desde UI: instalados 10 componentes shadcn (`button`, `input`, `label`, `checkbox`, `dialog`, `alert-dialog`, `dropdown-menu`, `form`, `sonner`, `card`) más deps (`@radix-ui/*`, `@hookform/resolvers`, `next-themes`, `sonner`). `eventFormDialog` (RHF + zodResolver, alterna crear/editar, toggle `allDay` reformatea `start/end` entre `date` y `datetime-local`) + `deleteEventDialog` (AlertDialog confirmación R4.2). `calendarApp` orquesta dialog state, llama `getCreateEvent`/`getEditEvent`/`getDeleteEvent` y mapea `EventStoreError` a `sonner.toast`. `<Toaster />` montado en `layout.tsx`. `getCreateEvent`/`getEditEvent`/`getDeleteEvent` en composition con `crypto.randomUUID` como `newId`. `pnpm build` verde (`/calendar` 62 kB; ~28 kB de costo por shadcn+RHF+sonner). 71/71 tests. commit 92719bd. |
 | 2026-05-16 | T11 done                  | E2E creación 4 tipos: helpers compartidos en `tests/e2e/_helpers.ts` (clean localStorage via `addInitScript`, navegación, llenado de form, asserts del panel y grid). 4 specs (`createSingleDayAllDay` R3.2, `createSingleDayTimed` R3.1, `createMultiDayAllDay` R3.3, `createMultiDayTimed` R3.4). Las multi-día también verifican R2.4 (evento visible en cada celda del rango). Browser chromium-headless-shell-1223 instalado. 4/4 verdes en ~4s contra `pnpm dev` reusado. commit 53d87a1.                                                                                                                                                                                                                                                                                                                                                            |
+| 2026-05-16 | T12 done                  | E2E editar/borrar/toggle/validaciones: 3 specs (`validations` R3.5+R3.6 — título vacío, sólo espacios, fin antes que inicio; `editAndDelete` R4.1+R4.2 — edit con prefill, cancel preserva, delete confirmado; `toggleStatus` R4.3 — toggle + persistencia tras reload). Fix RHF cross-field: `mode=onChange` no propaga error de `superRefine` al campo dependiente, añadido `useEffect` con `form.trigger` para "end"↔"start"↔"allDay". Fix helper seed: `addInitScript` se re-ejecutaba en cada reload y aplastaba cambios; cambiado a `page.evaluate` post-goto + reload. 12/12 e2e verdes en ~4s. commit f88476f.                                                                                                                                                                                                                                     |
 
 ## Próximo paso sugerido
 
-T11 done. Quedan tres bloques E2E que pueden correr en paralelo:
+T12 done. Quedan E2E:
 
-- **T12** — E2E editar/borrar/toggle/validaciones (R3.5, R3.6, R4.1–R4.3).
-- **T13** — E2E navegación + panel + multi-día (R2.1, R2.2, R2.3, R2.4).
+- **T13** — E2E navegación mensual + panel del día + multi-día display (R2.1, R2.2, R2.3, R2.4).
 - **T14** — E2E bloqueo R1.4 (override de `localStorage` en Playwright).
 - **T15** — E2E accessibility (teclado puro + axe-core en cada flow).
 
