@@ -4,7 +4,7 @@
 > **Servicio**: `demo1-ai-dlc`
 > **Initiative**: NONE
 > **Work item**: ninguno (feature standalone del demo)
-> **Estado**: borrador para aprobación. Bloqueado por **OQ-1** hasta resolver.
+> **Estado**: borrador para aprobación. OQ-1 resuelta (ver R1.4).
 
 ## Contexto / problema
 
@@ -50,6 +50,28 @@ El estado persistido en `localStorage` SHALL incluir un campo
 datos. El lector SHALL rechazar formatos con `version` desconocida y
 mostrar un mensaje de error en español sin sobrescribir los datos.
 Tests: unit
+
+#### R1.4 — Disponibilidad de localStorage
+WHEN la aplicación carga (cliente) AND `localStorage` no está
+disponible (no soportado por el navegador, deshabilitado por
+configuración, modo de navegación con almacenamiento restringido como
+Safari incógnito, o falla al intentar una escritura de prueba) THEN
+el sistema SHALL bloquear el uso de la aplicación y mostrar un
+mensaje a pantalla completa en español que explique:
+
+- Que **la aplicación requiere almacenamiento local del navegador**
+  para funcionar.
+- Que el usuario debe **habilitar el almacenamiento local** o salir
+  del modo de navegación privada.
+
+WHILE esta condición persiste, el sistema SHALL NOT mostrar el
+calendario, formularios de evento ni ningún otro control de gestión
+(la única UI visible es el mensaje de bloqueo). No se reintenta la
+detección automáticamente; el usuario recarga la página después de
+habilitar.
+
+Tests: unit (detección), e2e (UI bloqueada con mensaje), a11y (el
+mensaje cumple WCAG AA)
 
 ### R2 — Visualización del calendario
 
@@ -174,9 +196,9 @@ hay contratos cross-team. No hay endpoints REST nuevos en
 
 | Nivel | Aplica a | Herramienta |
 |---|---|---|
-| Unit | R1.x (parser/persistence), R2.4 (cálculo de rango), R3.x, R4.x (lógica de mutación, validaciones) | Vitest |
+| Unit | R1.x (parser/persistence, detección de localStorage), R2.4 (cálculo de rango), R3.x, R4.x (lógica de mutación, validaciones) | Vitest |
 | Integration | R1.1 (write + read en harness de jsdom) | Vitest + jsdom |
-| E2E | R2.x, R3.x, R4.x (flows de UI) | Playwright |
+| E2E | R1.4 (UI de bloqueo), R2.x, R3.x, R4.x (flows de UI) | Playwright |
 | A11y | R5.x (incluye R2.x y R3.x renderizadas) | axe-core dentro de Playwright |
 | Contract | — | N/A (sin API REST) |
 | Load | — | N/A (sin NFRs de performance declarados) |
@@ -186,30 +208,18 @@ Cada test cita su requirement con `// Derived from R<x>.<y>`
 
 ## OPEN_QUESTIONs
 
-### OQ-1 — Comportamiento con `localStorage` no disponible
-Casos: Safari modo incógnito con almacenamiento restringido, navegador
-con `localStorage` deshabilitado, cuota llena (`QuotaExceededError`).
+_Ninguna activa._
 
-Opciones a decidir antes de aprobar:
+### Historial
 
-- **(a)** Bloquear la app y mostrar banner explicativo en español
-  ("Tu navegador no permite guardar el calendario. Habilita el
-  almacenamiento local para usar esta aplicación.").
-- **(b)** Fallback a estado en memoria con warning visible ("Tus
-  cambios no se guardarán en este navegador").
-- **(c)** Ignorar el edge case en v1 (asumir `localStorage`
-  disponible). Riesgo: pantalla en blanco o crash silencioso en
-  Safari incógnito.
-
-**Bloquea aprobación** hasta resolver. Recomendación inicial: **(a)**
-por explicitud y simplicidad de implementación; agregar R1.4 con
-el comportamiento concreto cuando se resuelva.
+- **OQ-1** — Comportamiento con `localStorage` no disponible.
+  **Resuelta** (2026-05-16) con opción **(a)**: bloquear la app y
+  mostrar mensaje. Materializada en **R1.4**.
 
 ## Aprobación
 
 - **G2 (Feature spec)**: pendiente firma del tech lead (Juan Pico,
-  `jpico@syc.com.co`).
-- **Bloqueantes para G2**: resolver OQ-1.
+  `jpico@syc.com.co`). **Sin bloqueantes** — listo para revisión.
 - **Tras G2**: pasar a `design.md` con DEC-N (modelo de datos,
   composición de Clean Arch en client-side, librerías para
-  manejo de fechas).
+  manejo de fechas, detección concreta de `localStorage` para R1.4).

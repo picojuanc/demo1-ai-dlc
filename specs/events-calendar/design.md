@@ -102,8 +102,17 @@ interface EventStore {
   un Client boundary; minimizar el árbol cliente.
 - TODO **DEC-4** — Validación: Zod schemas compartidos entre use case
   y formulario (`react-hook-form` + `@hookform/resolvers/zod`).
-- TODO **DEC-5** — Resolución de **OQ-1** (`localStorage` no
-  disponible). Bloqueante para escribir tasks.md.
+- **DEC-5** — Comportamiento ante `localStorage` no disponible
+  (OQ-1 resuelta el 2026-05-16, materializada en R1.4): la app
+  detecta la disponibilidad al iniciar mediante una escritura de
+  prueba (`localStorage.setItem` + `removeItem`) y, ante cualquier
+  fallo, renderiza una vista de bloqueo a pantalla completa con
+  mensaje en español. No hay fallback en memoria. TODO definir:
+  - Ubicación de la detección (probable: hook
+    `useLocalStorageAvailability` en boundary cliente del root
+    layout protegido, o gate dentro de `composition.ts`).
+  - Componente `LocalStorageUnavailable.tsx` (texto, layout, foco
+    inicial, accesibilidad).
 
 ## 6. Manejo de errores
 
@@ -130,6 +139,7 @@ interface EventStore {
 | R1.1 | unit, integration | TODO |
 | R1.2 | unit, e2e | TODO |
 | R1.3 | unit | TODO |
+| R1.4 | unit, e2e, a11y | TODO |
 | R2.1 | e2e, a11y | TODO |
 | R2.2 | e2e | TODO |
 | R2.3 | e2e, a11y | TODO |
@@ -148,7 +158,7 @@ interface EventStore {
 ## 10. Aprobación
 
 - **G3 (Plan/Design)**: pendiente firma del tech lead.
-- **Bloqueantes**: completar todos los `TODO` de §3, §4, §5 (en
-  especial DEC-5 que cubre OQ-1).
+- **Bloqueantes**: completar todos los `TODO` de §3, §4, §5
+  (DEC-1..DEC-4 y los detalles pendientes de DEC-5).
 - **Tras G3**: poblar `tasks.md` con T1..TN siguiendo el orden de
   dependencias (domain → application → infrastructure → ui → tests).

@@ -28,7 +28,7 @@
 
 | Gate | Descripción | Firmante | Estado |
 |---|---|---|---|
-| G2 | Feature spec (`requirements.md`) | tech lead | **pending** (bloqueado por OQ-1) |
+| G2 | Feature spec (`requirements.md`) | tech lead | **pending** (ready for sign — sin bloqueantes) |
 | G3 | Plan / Design (`design.md` + `tasks.md`) | tech lead | pending |
 | G4 | PR de código | 1+ reviewer del equipo | pending |
 | G5 | Pre-deploy a prod | Ops | pending |
@@ -37,8 +37,12 @@
 
 ## OPEN_QUESTIONs activas
 
-- **OQ-1** — Comportamiento con `localStorage` no disponible. Bloquea
-  G2. Ver `requirements.md` § OPEN_QUESTIONs para opciones (a/b/c).
+_Ninguna._
+
+### Historial
+
+- **OQ-1** — Resuelta 2026-05-16 con opción (a). Materializada en
+  R1.4 (`requirements.md`).
 
 ## Tasks
 
@@ -53,13 +57,13 @@ _No hay tasks todavía. Se poblarán tras la firma de `design.md` (G3)._
 | Fecha | Evento | Detalle |
 |---|---|---|
 | 2026-05-16 | feature creada | `/spec-new events-calendar` ejecutado. Worktree `feat/events-calendar` creado desde `origin/pruebas`. `requirements.md` y `design.md` (esqueleto) escritos. |
+| 2026-05-16 | OQ-1 resuelta | Opción (a) — bloquear app y mostrar mensaje. Materializada en R1.4. G2 desbloqueado. |
 
 ## Próximo paso sugerido
 
-1. Resolver **OQ-1** (recomendación: opción (a) — banner + app
-   deshabilitada).
-2. Pedir firma de **G2** al tech lead.
-3. Iniciar entrevista de `design.md`: completar DEC-1..DEC-5.
+1. Pedir firma de **G2** al tech lead (`requirements.md` listo).
+2. Iniciar entrevista de `design.md`: completar DEC-1..DEC-4 y
+   detalles pendientes de DEC-5.
 
 ## Notas
 
