@@ -15,8 +15,8 @@
 
 ## State
 
-- **state**: `spec-approved`
-- **fase**: spec firmada — listo para entrevista de `design.md` (G3)
+- **state**: `design-approved`
+- **fase**: design + tasks firmados — listo para `/spec-implement` (T1)
 
 > Valores válidos del lifecycle (§6 methodology):
 > `not-started` → `spec-in-review` → `spec-approved` →
@@ -29,7 +29,7 @@
 | Gate | Descripción | Firmante | Estado |
 |---|---|---|---|
 | G2 | Feature spec (`requirements.md`) | tech lead | ✅ signed 2026-05-16 by jpico@syc.com.co (commit 1d43491) |
-| G3 | Plan / Design (`design.md` + `tasks.md`) | tech lead | 🟡 partial — design firmado 2026-05-16 by jpico@syc.com.co (commit c0fd6b7). `tasks.md` pendiente; re-firma necesaria para cerrar el gate. |
+| G3 | Plan / Design (`design.md` + `tasks.md`) | tech lead | ✅ signed 2026-05-16 by jpico@syc.com.co (design c0fd6b7 + tasks 20ff8f7) |
 | G4 | PR de código | 1+ reviewer del equipo | pending |
 | G5 | Pre-deploy a prod | Ops | pending |
 | G6 | Rollout | Ops + tech lead | pending |
@@ -46,11 +46,24 @@ _Ninguna._
 
 ## Tasks
 
-_No hay tasks todavía. Se poblarán tras la firma de `design.md` (G3)._
-
 | ID | Subject | Status | Commits | R*.* |
 |---|---|---|---|---|
-| — | — | — | — | — |
+| T1 | Bootstrap del proyecto (Next 15 + TS + Tailwind + shadcn + tooling) | pending | — | — |
+| T2 | Observabilidad mínima (pino + OTel skeleton) | pending | — | — |
+| T3 | Domain de eventos (entidades, schemas, helpers + tests) | pending | — | R1.3, R3.5, R3.6, R2.1, R2.4, R3.1–R3.4 |
+| T4 | Application (puerto EventStore + 5 use cases + tests) | pending | — | R1.1, R1.2, R3.x, R4.1–R4.3 |
+| T5 | Infrastructure storage (availability + localStorageEventStore + tests) | pending | — | R1.1, R1.2, R1.3, R1.4 |
+| T6 | Composition root + useLocalStorageAvailability | pending | — | R1.4 |
+| T7 | UI shell + componente bloqueo R1.4 | pending | — | R1.4, R5.1 |
+| T8 | UI vista mensual (monthHeader + monthGrid) | pending | — | R2.1, R2.3, R2.4, R5.1, R5.2 |
+| T9 | UI panel del día (dayPanel + eventRow) | pending | — | R2.2, R4.3, R5.1, R5.2 |
+| T10 | UI formularios (eventFormDialog + deleteEventDialog) | pending | — | R3.x, R4.1, R4.2, R5.1, R5.2 |
+| T11 | E2E creación 4 tipos | pending | — | R3.1–R3.4 |
+| T12 | E2E editar, borrar, toggle, validaciones | pending | — | R3.5, R3.6, R4.1–R4.3 |
+| T13 | E2E navegación + panel + multi-día | pending | — | R2.1–R2.4 |
+| T14 | E2E bloqueo R1.4 | pending | — | R1.4 |
+| T15 | E2E accessibility (teclado + axe) | pending | — | R5.1, R5.2 |
+| T16 | Cierre de cobertura | pending | — | (transversal) |
 
 ## Lifecycle log
 
@@ -61,17 +74,19 @@ _No hay tasks todavía. Se poblarán tras la firma de `design.md` (G3)._
 | 2026-05-16 | G2 firmado | requirements.md aprobado por jpico@syc.com.co sobre commit 1d43491. state → spec-approved. |
 | 2026-05-16 | design.md completo | DEC-1..DEC-5 cerrados en entrevista. Tabla de tests por R*.* mapeada a archivos. G3 ready for sign. |
 | 2026-05-16 | G3 firma parcial (design) | design.md aprobado por jpico@syc.com.co sobre commit c0fd6b7. State **NO** avanza hasta poblar tasks.md y re-firmar. |
+| 2026-05-16 | tasks.md completo | T1..T16 en orden estricto, mapeados a R*.* y archivos. commit 20ff8f7. |
+| 2026-05-16 | G3 firma completa | design + tasks aprobados. state → design-approved. Habilita `/spec-implement` T1. |
 
 ## Próximo paso sugerido
 
-1. Firmar **G3** sobre `design.md` (commit c0fd6b7) con commit
-   `sign(demo1-ai-dlc): G3 events-calendar design approved`.
-2. Poblar `tasks.md` con T1..TN en orden de dependencias (domain
-   → application → infrastructure → composition root → UI → tests).
-3. **Re-firmar G3** sobre la versión con `tasks.md` completo, o
-   tratar la firma actual como cubriendo design + tasks juntos
-   (decidir antes de firmar).
-4. Recién después: `/spec-implement` (T1).
+`/spec-implement` para arrancar **T1** (bootstrap del proyecto Next).
+Cada task sigue el flujo:
+
+1. Marcar la task como `in-progress` en este `status.md`.
+2. Implementar los archivos declarados, con tests citando `R*.*`.
+3. Commit con formato `feat|fix|chore(demo1-ai-dlc): T<n> - <desc> [R*.*]`.
+4. Marcar la task como `done` en este `status.md` con el hash del commit.
+5. Pasar a la siguiente task respetando el orden estricto.
 
 ## Notas
 
