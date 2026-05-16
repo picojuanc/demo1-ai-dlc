@@ -1,4 +1,4 @@
-# Branch flow — {{SERVICE_NAME}}
+# Branch flow — demo1-ai-dlc
 
 > Flujo de promoción de ramas para este repo. Referenciado por
 > `/spec-promote` y por el Service Agent al crear worktrees con
@@ -30,7 +30,7 @@ Cada feature vive en su propio worktree (§6 *Worktree, ramas y flujo de
 promoción* del methodology):
 
 ```bash
-git worktree add -b feat/<feature-slug> ../{{SERVICE_NAME}}--<feature-slug> origin/pruebas
+git worktree add -b feat/<feature-slug> ../demo1-ai-dlc--<feature-slug> origin/pruebas
 ```
 
 El Service Agent (`/spec-new`) propone el comando y pide OK antes de
