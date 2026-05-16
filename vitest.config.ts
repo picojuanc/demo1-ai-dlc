@@ -18,12 +18,26 @@ export default defineConfig({
       reporter: ["text", "html", "lcov"],
       include: ["src/**/*.{ts,tsx}"],
       exclude: [
+        // shadcn — generado por la herramienta, ver `stack/patterns.md`.
         "src/components/ui/**",
         "src/**/*.types.ts",
         "src/**/*.d.ts",
+        // Next shells (no lógica testeable).
         "src/app/layout.tsx",
         "src/app/page.tsx",
+        // UI de la feature: cobertura mediante Playwright E2E (T11–T15),
+        // no via vitest.
+        "src/app/(app)/**",
+        // Composition root: wiring puro, cubierto vía integration + E2E.
         "src/composition.ts",
+        // Utility de shadcn (cn = clsx + tailwind-merge).
+        "src/lib/utils.ts",
+        // Archivos sólo-tipos (entidades, errores, value objects, puerto).
+        "src/domain/events/entities.ts",
+        "src/domain/events/errors.ts",
+        "src/domain/events/valueObjects.ts",
+        "src/application/events/ports/**",
+        // Config / instrumentación.
         "next.config.ts",
         "tailwind.config.ts",
         "instrumentation.ts",
