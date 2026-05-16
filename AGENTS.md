@@ -1,4 +1,4 @@
-# AGENTS.md — {{SERVICE_NAME}}
+# AGENTS.md — demo1-ai-dlc
 
 > Instrucciones canónicas para el Service Agent de este repo.
 >
@@ -12,13 +12,13 @@
 
 ## Project
 
-**Service**: `{{SERVICE_NAME}}`
-**Owner**: `{{TEAM_NAME}}` (lead: `{{LEAD_EMAIL}}`)
-**Initiative**: `{{INITIATIVE_SLUG_OR_NONE}}`
+**Service**: `demo1-ai-dlc`
+**Owner**: `PENTAI` (lead: `jpico@syc.com.co`)
+**Initiative**: `NONE`
 **Stack**: ver `stack/tech-stack.md`
 **Runtime**: ver `stack/tech-stack.md`
-**Deploy target**: OpenShift namespace `{{OCP_NAMESPACE}}` en cluster `{{OCP_CLUSTER}}`
-**On-call**: `{{ONCALL_EMAIL}}`
+**Deploy target**: TBD (deploy target sin decidir — ver `stack/tech-stack.md` § Deploy target)
+**On-call**: TBD
 
 ---
 
@@ -72,12 +72,12 @@ NUNCA improvises lógica que no esté especificada (§3.12 del methodology).
 ### Convención de commits
 
 ```
-<type>({{SERVICE_NAME}}): T<n> - <desc> [R<x>.<y>] AB#<workitem-id>
+<type>(demo1-ai-dlc): T<n> - <desc> [R<x>.<y>] AB#<workitem-id>
 ```
 
 Ejemplo:
 ```
-feat({{SERVICE_NAME}}): T1 - <descripción corta> [R1.3, R5.1] AB#12347
+feat(demo1-ai-dlc): T1 - <descripción corta> [R1.3, R5.1] AB#12347
 ```
 
 Detalles adicionales en `stack/patterns.md` § *Commits*.
