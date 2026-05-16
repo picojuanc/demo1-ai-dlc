@@ -88,12 +88,13 @@ _Ninguna._
 
 ## Próximo paso sugerido
 
-`/spec-implement` para arrancar **T9** (UI panel del día). Crea
-`dayPanel.tsx` (lista de eventos del `selectedDay` con orden todo-el-día
-
-- luego por hora) y `eventRow.tsx` (toggle done + dropdown edit/delete).
-  Cubre R2.2, R4.3 (toggle desde la lista), R5.1, R5.2. Necesita
-  `toggleEventStatus` use case en composition. Cada task sigue el flujo:
+`/spec-implement` para arrancar **T10** (UI formularios). Crea
+`eventFormDialog.tsx` (modal crear/editar con RHF + zodResolver) y
+`deleteEventDialog.tsx` (confirmación). Necesita instalar componentes
+shadcn (`button`, `input`, `label`, `checkbox`, `dialog`, `alert-dialog`,
+`form`, `sonner`, `card`, `dropdown-menu`) — pospuesto desde T1.
+Agregar `getCreateEvent`/`getEditEvent`/`getDeleteEvent` a composition.
+Cubre R3.1–R3.6, R4.1, R4.2, R5.1, R5.2. Cada task sigue el flujo:
 
 1. Marcar la task como `in-progress` en este `status.md`.
 2. Implementar los archivos declarados, con tests citando `R*.*`.
