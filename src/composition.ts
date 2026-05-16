@@ -1,4 +1,7 @@
 import type { EventStore } from "@/application/events/ports/eventStore";
+import { makeCreateEvent, type CreateEvent } from "@/application/events/useCases/createEvent";
+import { makeDeleteEvent, type DeleteEvent } from "@/application/events/useCases/deleteEvent";
+import { makeEditEvent, type EditEvent } from "@/application/events/useCases/editEvent";
 import { makeListEvents, type ListEvents } from "@/application/events/useCases/listEvents";
 import {
   makeToggleEventStatus,
@@ -35,4 +38,20 @@ export function getListEvents(): ListEvents {
 
 export function getToggleEventStatus(): ToggleEventStatus {
   return makeToggleEventStatus({ store: getEventStore(), clock: nowIso });
+}
+
+export function getCreateEvent(): CreateEvent {
+  return makeCreateEvent({
+    store: getEventStore(),
+    clock: nowIso,
+    newId: () => crypto.randomUUID(),
+  });
+}
+
+export function getEditEvent(): EditEvent {
+  return makeEditEvent({ store: getEventStore(), clock: nowIso });
+}
+
+export function getDeleteEvent(): DeleteEvent {
+  return makeDeleteEvent({ store: getEventStore() });
 }

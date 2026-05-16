@@ -2,13 +2,23 @@
 
 import { addMonths, startOfMonth } from "date-fns";
 import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import type { Event } from "@/domain/events/entities";
 import type { EventStoreError } from "@/domain/events/errors";
-import { getListEvents, getToggleEventStatus } from "@/composition";
+import type { EventInput } from "@/domain/events/schemas";
+import {
+  getCreateEvent,
+  getDeleteEvent,
+  getEditEvent,
+  getListEvents,
+  getToggleEventStatus,
+} from "@/composition";
 import { useLocalStorageAvailability } from "@/lib/hooks/useLocalStorageAvailability";
 
 import { DayPanel } from "./components/dayPanel";
+import { DeleteEventDialog } from "./components/deleteEventDialog";
+import { EventFormDialog, type EventFormMode } from "./components/eventFormDialog";
 import { LocalStorageUnavailable } from "./components/localStorageUnavailable";
 import { MonthGrid } from "./components/monthGrid";
 import { MonthHeader } from "./components/monthHeader";
@@ -16,7 +26,8 @@ import { MonthHeader } from "./components/monthHeader";
 // Isla cliente principal. Maneja:
 // - Detección de disponibilidad (R1.4).
 // - Carga inicial de eventos (R1.2).
-// - Mes visible + día seleccionado (R2.1, R2.2, R2.3).
+// - Estado de mes visible + día seleccionado (R2.1, R2.2, R2.3).
+// - Diálogos de crear/editar/borrar (R3.x, R4.1, R4.2) y toggle (R4.3).
 
 export function CalendarApp(): React.ReactElement {
   const available = useLocalStorageAvailability();
@@ -41,6 +52,9 @@ function CalendarMain(): React.ReactElement {
   const [events, setEvents] = useState<Event[]>([]);
   const [loadError, setLoadError] = useState<EventStoreError | null>(null);
 
+  const [formMode, setFormMode] = useState<EventFormMode | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<Event | null>(null);
+
   useEffect(() => {
     let cancelled = false;
     void getListEvents()().then((result) => {
@@ -58,14 +72,67 @@ function CalendarMain(): React.ReactElement {
     if (result.ok) {
       setEvents((prev) => prev.map((e) => (e.id === result.value.id ? result.value : e)));
     } else {
-      setLoadError(result.error);
+      reportStoreError(result.error);
     }
   }, []);
 
-  // T10 conectará estos handlers a los diálogos de crear/editar/borrar.
-  const handleEdit = useCallback((_event: Event) => {}, []);
-  const handleDelete = useCallback((_event: Event) => {}, []);
-  const handleAddEvent = useCallback((_day: string) => {}, []);
+  const handleAddEvent = useCallback((day: string) => {
+    setFormMode({ kind: "create", defaultDay: day });
+  }, []);
+
+  const handleEdit = useCallback((event: Event) => {
+    setFormMode({ kind: "edit", event });
+  }, []);
+
+  const handleDelete = useCallback((event: Event) => {
+    setDeleteTarget(event);
+  }, []);
+
+  const handleSubmitForm = useCallback(
+    async (input: EventInput, mode: EventFormMode): Promise<boolean> => {
+      if (mode.kind === "create") {
+        const result = await getCreateEvent()(input);
+        if (result.ok) {
+          setEvents((prev) => [...prev, result.value]);
+          toast.success("Evento creado");
+          return true;
+        }
+        if (result.error.kind === "validation") {
+          // Shouldn't happen — RHF ya validó. Defensa.
+          toast.error("Datos inválidos");
+          return false;
+        }
+        reportStoreError(result.error);
+        return false;
+      }
+
+      const result = await getEditEvent()(mode.event, input);
+      if (result.ok) {
+        setEvents((prev) => prev.map((e) => (e.id === result.value.id ? result.value : e)));
+        toast.success("Cambios guardados");
+        return true;
+      }
+      if (result.error.kind === "validation") {
+        toast.error("Datos inválidos");
+        return false;
+      }
+      reportStoreError(result.error);
+      return false;
+    },
+    [],
+  );
+
+  const handleConfirmDelete = useCallback(async (event: Event) => {
+    const result = await getDeleteEvent()(event.id);
+    if (result.ok) {
+      setEvents((prev) => prev.filter((e) => e.id !== event.id));
+      toast.success("Evento eliminado");
+      setDeleteTarget(null);
+    } else {
+      reportStoreError(result.error);
+      setDeleteTarget(null);
+    }
+  }, []);
 
   return (
     <main role="main" className="container mx-auto flex min-h-screen flex-col gap-4 p-4 md:p-8">
@@ -92,8 +159,45 @@ function CalendarMain(): React.ReactElement {
         onDelete={handleDelete}
         onAddEvent={handleAddEvent}
       />
+
+      <EventFormDialog
+        open={formMode !== null}
+        mode={formMode}
+        onOpenChange={(open) => {
+          if (!open) setFormMode(null);
+        }}
+        onSubmit={handleSubmitForm}
+      />
+      <DeleteEventDialog
+        open={deleteTarget !== null}
+        event={deleteTarget}
+        onOpenChange={(open) => {
+          if (!open) setDeleteTarget(null);
+        }}
+        onConfirm={handleConfirmDelete}
+      />
     </main>
   );
+}
+
+function reportStoreError(error: EventStoreError): void {
+  switch (error.kind) {
+    case "quotaExceeded":
+      toast.error("No se pudo guardar el cambio. El almacenamiento del navegador está lleno.");
+      return;
+    case "notFound":
+      toast.error("El evento ya no existe. Recarga el calendario.");
+      return;
+    case "corruptedStorage":
+      toast.error("Los datos del calendario están dañados.");
+      return;
+    case "schemaUnknown":
+      toast.error("Datos guardados en formato desconocido.");
+      return;
+    case "unavailable":
+      toast.error("El almacenamiento local no está disponible.");
+      return;
+  }
 }
 
 function LoadErrorBanner({ error }: { error: EventStoreError }): React.ReactElement {
