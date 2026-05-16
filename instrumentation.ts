@@ -1,9 +1,19 @@
 // OpenTelemetry instrumentation entrypoint para Next 15.
 // Se ejecuta una sola vez por proceso, antes de servir requests.
-// Hoy es placeholder — cuando el OTEL_EXPORTER_OTLP_ENDPOINT esté
-// configurado en `.env.local`, este archivo registra el SDK.
+//
+// Hoy: placeholder. Se enciende cuando exista un deploy target con
+// OTLP collector (ver stack/tech-stack.md § Deploy target).
+//
+// Para activar OTel cuando llegue el momento:
+//
+//   import { registerOTel } from "@vercel/otel";
+//   export function register() {
+//     registerOTel({
+//       serviceName: "demo1-ai-dlc",
+//       traceExporter: "auto", // toma OTEL_EXPORTER_OTLP_ENDPOINT
+//     });
+//   }
 
-export async function register() {
-  // TODO (T2): instalar y configurar @vercel/otel o @opentelemetry/sdk-node
-  // según el deploy target final (ver stack/tech-stack.md § Deploy target).
+export function register(): void {
+  // No-op por ahora.
 }
