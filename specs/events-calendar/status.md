@@ -16,7 +16,7 @@
 ## State
 
 - **state**: `in-progress`
-- **fase**: ejecución de tasks. T1–T5 done; T6 en cola.
+- **fase**: ejecución de tasks. T1–T6 done; T7 en cola.
 
 > Valores válidos del lifecycle (§6 methodology):
 > `not-started` → `spec-in-review` → `spec-approved` →
@@ -53,7 +53,7 @@ _Ninguna._
 | T3  | Domain de eventos (entidades, schemas, helpers + tests)                | ✅ done | 0ee4205 | R1.3, R3.5, R3.6, R2.1, R2.4, R3.1–R3.4 |
 | T4  | Application (puerto EventStore + 5 use cases + tests)                  | ✅ done | 312800d | R1.1, R1.2, R3.1–R3.6, R4.1–R4.3        |
 | T5  | Infrastructure storage (availability + localStorageEventStore + tests) | ✅ done | 3f3ef6f | R1.1, R1.2, R1.3, R1.4                  |
-| T6  | Composition root + useLocalStorageAvailability                         | pending | —       | R1.4                                    |
+| T6  | Composition root + useLocalStorageAvailability                         | ✅ done | f1dc6b9 | R1.4                                    |
 | T7  | UI shell + componente bloqueo R1.4                                     | pending | —       | R1.4, R5.1                              |
 | T8  | UI vista mensual (monthHeader + monthGrid)                             | pending | —       | R2.1, R2.3, R2.4, R5.1, R5.2            |
 | T9  | UI panel del día (dayPanel + eventRow)                                 | pending | —       | R2.2, R4.3, R5.1, R5.2                  |
@@ -81,12 +81,13 @@ _Ninguna._
 | 2026-05-16 | T3 done                   | Domain events: entities, value objects, schemas Zod, helpers (eventKind, eventInDay, eventDays, eventsInRange), errors. 29 tests nuevos (31/31 total). commit 0ee4205.                                                                                                                                                                                                                                                                                                      |
 | 2026-05-16 | T4 done                   | Application: puerto `EventStore` async + use cases `createEvent`/`editEvent`/`deleteEvent`/`toggleEventStatus`/`listEvents` con factories DI (clock, newId). Helper `_validation` mapea Zod issues a `EventValidationError`. 19 tests nuevos con fake in-memory store (50/50 total). commit 312800d.                                                                                                                                                                        |
 | 2026-05-16 | T5 done                   | Infrastructure storage: `isLocalStorageAvailable()` (probe + try/catch DEC-5) y `makeLocalStorageEventStore({ storage })` (factory DI sobre `Storage`). Key `dad_events_v1`. `list` distingue ausente/corrupto/schemaUnknown vía precheck de `version`. `save` upsert; mapea `QuotaExceededError` → `quotaExceeded` y resto → `unavailable`. 19 tests nuevos (16 unit + 3 integration round-trip; spies sobre `Storage.prototype` para jsdom). 69/69 total. commit 3f3ef6f. |
+| 2026-05-16 | T6 done                   | Composition root `getEventStore()` (cacheado, fail-fast en SSR) y hook `useLocalStorageAvailability` (`null → boolean` tras `useEffect`). 2 tests con `renderHook` de RTL. 71/71 total. commit f1dc6b9.                                                                                                                                                                                                                                                                     |
 
 ## Próximo paso sugerido
 
-`/spec-implement` para arrancar **T6** (Composition root + hook
-`useLocalStorageAvailability`). Wiring del puerto a la impl localStorage
-y hook que detecta disponibilidad en cliente (R1.4 — consumo).
+`/spec-implement` para arrancar **T7** (UI shell + componente de
+bloqueo R1.4). Primera task de la capa Presentation: `page.tsx` (RSC),
+`calendarApp.tsx` (`'use client'`) y `localStorageUnavailable.tsx`.
 Cada task sigue el flujo:
 
 1. Marcar la task como `in-progress` en este `status.md`.
