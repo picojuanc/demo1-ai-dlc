@@ -15,8 +15,8 @@
 
 ## State
 
-- **state**: `not-started`
-- **fase**: spec (G2 aún sin firmar)
+- **state**: `spec-approved`
+- **fase**: spec firmada — listo para entrevista de `design.md` (G3)
 
 > Valores válidos del lifecycle (§6 methodology):
 > `not-started` → `spec-in-review` → `spec-approved` →
@@ -28,7 +28,7 @@
 
 | Gate | Descripción | Firmante | Estado |
 |---|---|---|---|
-| G2 | Feature spec (`requirements.md`) | tech lead | **pending** (ready for sign — sin bloqueantes) |
+| G2 | Feature spec (`requirements.md`) | tech lead | ✅ signed 2026-05-16 by jpico@syc.com.co (commit 1d43491) |
 | G3 | Plan / Design (`design.md` + `tasks.md`) | tech lead | pending |
 | G4 | PR de código | 1+ reviewer del equipo | pending |
 | G5 | Pre-deploy a prod | Ops | pending |
@@ -58,12 +58,15 @@ _No hay tasks todavía. Se poblarán tras la firma de `design.md` (G3)._
 |---|---|---|
 | 2026-05-16 | feature creada | `/spec-new events-calendar` ejecutado. Worktree `feat/events-calendar` creado desde `origin/pruebas`. `requirements.md` y `design.md` (esqueleto) escritos. |
 | 2026-05-16 | OQ-1 resuelta | Opción (a) — bloquear app y mostrar mensaje. Materializada en R1.4. G2 desbloqueado. |
+| 2026-05-16 | G2 firmado | requirements.md aprobado por jpico@syc.com.co sobre commit 1d43491. state → spec-approved. |
 
 ## Próximo paso sugerido
 
-1. Pedir firma de **G2** al tech lead (`requirements.md` listo).
-2. Iniciar entrevista de `design.md`: completar DEC-1..DEC-4 y
-   detalles pendientes de DEC-5.
+1. Iniciar entrevista de `design.md`: completar DEC-1..DEC-4 y
+   detalles pendientes de DEC-5 (componente `LocalStorageUnavailable`,
+   ubicación de la detección).
+2. Tras `design.md` completo, poblar `tasks.md` (T1..TN) en orden de
+   dependencias y firmar **G3**.
 
 ## Notas
 
