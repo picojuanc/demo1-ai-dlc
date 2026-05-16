@@ -107,7 +107,7 @@ return Response.json(result.value);
 
 Donde:
 
-- `<type>`: `feat | fix | refactor | test | docs | chore | perf`
+- `<type>`: `feat | fix | refactor | test | docs | chore | perf | sign`
 - `T<n>`: ID de la task en `specs/<feature>/tasks.md` (si aplica)
 - `R<x>.<y>`: requirement EARS cubierto (puede ser lista
   `[R1.2, R1.3]`)
@@ -125,6 +125,20 @@ docs(demo1-ai-dlc): ADR 0001 sobre Clean Architecture
 
 `chore` y `docs` pueden omitir `T<n>`, `[R*.*]` y `AB#` si la mejora
 no está atada a una task de spec.
+
+`sign` se usa exclusivamente para **firmar gates** (ver `AGENTS.md` §
+Gates aplicables a este servicio → Mecanismo de firma). El subject
+nombra el gate y la feature; el body documenta qué se firma, qué
+commits se revisaron y cualquier contexto relevante. No lleva `T<n>`
+ni `[R*.*]` salvo que el gate aplique a un requirement específico.
+
+Ejemplos `sign`:
+
+```
+sign(demo1-ai-dlc): G2 events-calendar approved
+sign(demo1-ai-dlc): G3 events-calendar design+tasks approved
+sign(demo1-ai-dlc): G6 events-calendar rolled out
+```
 
 ## Organización de tests
 

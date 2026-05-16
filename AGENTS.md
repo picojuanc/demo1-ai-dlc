@@ -204,6 +204,33 @@ crea la primera feature. Por defecto:
 - **G6** (rollout gate) — Ops + tech lead
 - **G7** (bug triage) — tech lead
 
+### Mecanismo de firma
+
+La firma de cada gate se registra mediante un **commit dedicado** con
+tipo `sign` (ver `stack/patterns.md` § Formato de commits) que actualiza
+`specs/<feature>/status.md` así:
+
+1. La fila del gate en la tabla **Gates** pasa a
+   `✅ signed YYYY-MM-DD by <email> (commit <hash-del-commit-firmado>)`.
+2. Si el gate avanza el lifecycle (G2 ⇒ `spec-approved`,
+   G3 ⇒ `design-approved`, G6 ⇒ `rolled-out`), se actualiza el campo
+   `state:`.
+3. Se agrega una entry al lifecycle log con fecha y resumen.
+
+**Reglas operacionales:**
+
+- El commit de firma se hace en la rama de feature (`feat/<slug>`),
+  excepto los gates de promoción y deploy (G5, G6) que se hacen sobre
+  la rama destino (`qa`, `main`).
+- El `Author` del commit `sign` **debe ser el firmante** (no
+  co-author). En este repo demo con un solo dev/lead, la firma es
+  self-approval explícito y documentado — perfectamente válido para
+  el propósito del demo, pero no sustituye revisión humana cuando
+  exista separación de roles.
+- Un gate `sign` **no es reversible**: si se descubre que la firma
+  fue incorrecta, no se borra el commit; se abre un `/spec-amend` o,
+  según gravedad, se trata como bug.
+
 ---
 
 ## Anti-patrones específicos
