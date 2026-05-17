@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(git -C /Users/picojuanc/Downloads/demo1-ai-dlc--events-calendar add specs/events-calendar/status.md)",
-      "Bash(git -C /Users/picojuanc/Downloads/demo1-ai-dlc--events-calendar commit -m ' *)",
-      "Bash(git -C /Users/picojuanc/Downloads/demo1-ai-dlc--events-calendar push)"
-    ]
-  }
-}
