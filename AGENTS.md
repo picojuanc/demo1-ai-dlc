@@ -18,6 +18,7 @@
 **Stack**: ver `stack/tech-stack.md`
 **Runtime**: ver `stack/tech-stack.md`
 **Deploy target**: TBD (deploy target sin decidir — ver `stack/tech-stack.md` § Deploy target)
+**Repo config**: `repo-config.yaml` (repo_type, tracker, environments, promotion_path — §6 *Configuración del repo* del methodology)
 **On-call**: TBD
 
 ---
@@ -71,12 +72,23 @@ NUNCA improvises lógica que no esté especificada (§3.12 del methodology).
 
 ### Convención de commits
 
+El sufijo `AB#<id>` (Azure DevOps) aplica **sólo si**
+`repo-config.yaml > tracker: azure-devops`. Con `tracker: none` (estado
+actual del demo), omitirlo. Con otro tracker (`github-issues`, `jira`,
+`linear`), reemplazar con la convención correspondiente — ver §6
+*Configuración del repo* del methodology.
+
 ```
+# tracker: none (estado actual)
+<type>(demo1-ai-dlc): T<n> - <desc> [R<x>.<y>]
+
+# tracker: azure-devops
 <type>(demo1-ai-dlc): T<n> - <desc> [R<x>.<y>] AB#<workitem-id>
 ```
 
-Ejemplo:
+Ejemplos:
 ```
+feat(demo1-ai-dlc): T1 - <descripción corta> [R1.3, R5.1]
 feat(demo1-ai-dlc): T1 - <descripción corta> [R1.3, R5.1] AB#12347
 ```
 
@@ -134,18 +146,25 @@ coordinator*). En la práctica:
 
 Comandos disponibles (ver `.claude/commands/` para los atajos Claude Code):
 
-| Comando | Cuándo |
-|---|---|
-| `/spec-new <slug>` | Bootstrap de una nueva feature con entrevista guiada |
-| `/spec-implement <slug>` | Avanzar la siguiente task pending |
-| `/spec-status <slug>` | Resumen legible del estado (read-only) |
-| `/spec-verify <slug>` | Auditar cobertura R*.* ↔ tests, gaps, drift |
-| `/spec-amend <slug>` | Cambio post-aprobación (cliente / legal / negocio) |
-| `/spec-handoff <slug>` | Transferir ownership a otro dev |
-| `/spec-promote <slug> --to <env>` | Abrir PR de promoción (pruebas → qa → main) |
-| `/bug-triage <descripción>` | Clasificar bug A/B/C/D/E |
-| `/ado-link <pr> <wi>` | Vincular PR a work item de ADO |
-| `/ado-status <pipeline>` | Estado de un pipeline |
+| Comando | Cuándo | Condicionado a `repo-config.yaml` |
+|---|---|---|
+| `/spec-new <slug>` | Bootstrap de una nueva feature con entrevista guiada | siempre |
+| `/spec-implement <slug>` | Avanzar la siguiente task pending | siempre |
+| `/spec-status <slug>` | Resumen legible del estado (read-only) | siempre |
+| `/spec-verify <slug>` | Auditar cobertura R*.* ↔ tests, gaps, drift | siempre |
+| `/spec-amend <slug>` | Cambio post-aprobación (cliente / legal / negocio) | siempre |
+| `/spec-handoff <slug>` | Transferir ownership a otro dev | siempre |
+| `/spec-promote <slug> --to <env>` | Abrir PR de promoción al siguiente ambiente | siempre — la lista de `<env>` válidos viene de `environments[].name` |
+| `/bug-triage <descripción>` | Clasificar bug A/B/C/D/E | siempre |
+| `/ado-link <pr> <wi>` | Vincular PR a work item de ADO | sólo si `tracker: azure-devops` |
+| `/ado-status <pipeline>` | Estado de un pipeline de ADO | sólo si `tracker: azure-devops` y/o CI hospedado en ADO |
+
+> **Aplicabilidad por stack**: los slash commands con prefijo
+> específico (`/ado-*`, `/oc-*`, `/figma-*`) sólo se ofrecen si el repo
+> declara el stack correspondiente en `repo-config.yaml`. El Service
+> Agent **no propone** comandos que no apliquen y **no falla
+> silenciosamente** — explica por qué un comando solicitado no aplica
+> y propone la alternativa equivalente.
 
 ---
 
@@ -243,8 +262,10 @@ los anti-patrones más críticos como recordatorio explícito.
 ## Referencias
 
 - Metodología: `<path-al-doc-AI-DLC>/ai-dlc-methodology.md` (fuente de
-  verdad de §6 specs, §7 agentes, §11 slash commands).
+  verdad de §6 specs + §6 *Configuración del repo*, §7 agentes, §11
+  slash commands).
 - Stack: `stack/` (este repo).
-- Branch flow: `branch-flow.md`.
+- Repo config: `repo-config.yaml` (incluye branch flow, tracker,
+  runtime — §6 *Configuración del repo* del methodology).
 - Specs activas: `specs/`.
 - Catálogo / contratos compartidos: `.org/` (si aplica cross-repo).

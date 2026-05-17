@@ -15,9 +15,14 @@ Sigue el protocolo §7 (AGENTS.md). Para la feature $ARGUMENTS:
      conversación previa relevante?
 
 2. **WORKTREE** — preparar el espacio de trabajo aislado (§6 del
-   methodology *Worktree, ramas y flujo de promoción*):
-   - **Preguntar** la rama base: `pruebas` / `qa` / `main` u otra
-     (default `pruebas`; respetar `branch-flow.md`).
+   methodology *Configuración del repo* + *Worktree, ramas y flujo de
+   promoción*):
+   - **Leer** `repo-config.yaml` y obtener las ramas declaradas en
+     `environments[].branch`. Si el archivo no existe, **parar** y
+     proponer crearlo antes de seguir (no asumir `pruebas/qa/main`
+     por reflejo).
+   - **Preguntar** la rama base ofreciendo **sólo** las ramas
+     declaradas (default = la primera de `promotion_path`).
    - **Proponer** crear:
      `git worktree add -b feat/<feature-slug> ../<repo>--<feature-slug> origin/<base>`
      y pedir OK antes de ejecutar (acción reversible pero observable).
