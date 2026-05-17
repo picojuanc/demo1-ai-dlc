@@ -23,6 +23,40 @@
 
 ---
 
+## Inventario de archivos de la metodología
+
+Estos paths pertenecen a la metodología AI-DLC. Todo lo demás
+(`src/`, `tests/`, `public/`, `package.json`, configs de build, etc.)
+es código y assets del proyecto.
+
+| Path                    | Propósito                                                                                                                                       | Cargado en sesión                                |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| `AGENTS.md`             | Este archivo — fuente de verdad del agente, leído por Claude Code, Cursor, Codex CLI, Continue, Aider, OpenCode                                 | siempre                                          |
+| `CLAUDE.md`             | Redirect a AGENTS.md (compat con Claude Code legacy)                                                                                            | siempre                                          |
+| `repo-config.yaml`      | Config operacional del repo (`repo_type`, `tracker`, `environments`, `promotion_path`, `runtime`) — §6 _Configuración del repo_ del methodology | siempre                                          |
+| `.claude/commands/*.md` | Wrappers delgados de slash commands (~10 líneas c/u) para autocompletado del slash menu de Claude Code                                          | sólo al invocar el comando                       |
+| `.agents/commands/*.md` | Bodies **canonical** de los 10 slash commands; lazy-loaded                                                                                      | sólo al invocar el comando                       |
+| `.agents/skills/`       | Skills agente (Playwright, shadcn, vitest, etc., externos)                                                                                      | sólo cuando la skill se usa                      |
+| `stack/*.md`            | Convenciones técnicas del proyecto: `tech-stack`, `architecture`, `patterns`, `security`, `constraints`, `testing`                              | siempre (lo lee el Service Agent al implementar) |
+| `specs/<feature>/`      | Una carpeta por feature: `requirements.md`, `design.md`, `tasks.md`, `status.md`, `bugs.md`, `amendments.md`, `mocks/`                          | sólo la feature activa                           |
+| `.org/contracts/`       | Contratos cross-repo (opcional — sólo si hay dependencias cross-repo, §9 del methodology)                                                       | sólo si hay D-N cross-repo                       |
+
+**Si encontrás un archivo nuevo en alguno de los paths de arriba**,
+pertenece a la metodología y debería estar listado en esta tabla. Si
+encontrás un archivo desconocido en otra ubicación, es código del
+proyecto.
+
+**Reglas de mantenimiento del inventario**:
+
+- Cuando agregues un nuevo slash command: archivo en
+  `.agents/commands/<name>.md` + wrapper en `.claude/commands/<name>.md`
+  - entrada en la tabla de §_Slash commands disponibles_ abajo.
+- Cuando agregues una nueva skill: bajo `.agents/skills/<name>/SKILL.md`.
+- Cuando agregues una nueva sección a este AGENTS.md: aparece
+  automáticamente, no requiere update de tabla.
+
+---
+
 ## Bootstrap (cuando abras este repo por primera vez)
 
 Este repo es un starter del methodology AI-DLC. Antes de la primera
