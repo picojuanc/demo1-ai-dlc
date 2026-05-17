@@ -18,6 +18,7 @@
 **Stack**: ver `stack/tech-stack.md`
 **Runtime**: ver `stack/tech-stack.md`
 **Deploy target**: TBD (deploy target sin decidir — ver `stack/tech-stack.md` § Deploy target)
+**Repo config**: `repo-config.yaml` (repo_type, tracker, environments, promotion_path — §6 _Configuración del repo_ del methodology)
 **On-call**: TBD
 
 ---
@@ -41,10 +42,11 @@ orden (cada archivo bloquea al siguiente):
    herramientas.
 
 Mientras estos archivos digan `TODO`, el Service Agent debe:
+
 - **Negarse** a ejecutar `/spec-implement` o cualquier acción que genere
   código.
-- **Proponer** una sesión de bootstrap conversacional: *"el `stack/` está
-  incompleto. ¿Empezamos llenándolo? Te pregunto stack por stack."*
+- **Proponer** una sesión de bootstrap conversacional: _"el `stack/` está
+  incompleto. ¿Empezamos llenándolo? Te pregunto stack por stack."_
 - Una vez completados, actualizar este AGENTS.md sustituyendo los
   `{{placeholders}}` por los valores reales.
 
@@ -71,24 +73,36 @@ NUNCA improvises lógica que no esté especificada (§3.12 del methodology).
 
 ### Convención de commits
 
+El sufijo `AB#<id>` (Azure DevOps) aplica **sólo si**
+`repo-config.yaml > tracker: azure-devops`. Con `tracker: none` (estado
+actual del demo), omitirlo. Con otro tracker (`github-issues`, `jira`,
+`linear`), reemplazar con la convención correspondiente — ver §6
+_Configuración del repo_ del methodology.
+
 ```
+# tracker: none (estado actual)
+<type>(demo1-ai-dlc): T<n> - <desc> [R<x>.<y>]
+
+# tracker: azure-devops
 <type>(demo1-ai-dlc): T<n> - <desc> [R<x>.<y>] AB#<workitem-id>
 ```
 
-Ejemplo:
+Ejemplos:
+
 ```
+feat(demo1-ai-dlc): T1 - <descripción corta> [R1.3, R5.1]
 feat(demo1-ai-dlc): T1 - <descripción corta> [R1.3, R5.1] AB#12347
 ```
 
-Detalles adicionales en `stack/patterns.md` § *Commits*.
+Detalles adicionales en `stack/patterns.md` § _Commits_.
 
 ---
 
 ## Doble rol del Service Agent (§7 del methodology)
 
 1. **Dispatcher por intención** — el dev habla en lenguaje natural
-   (*"quiero arrancar una feature de export a Excel"*, *"retomemos lo
-   de saldo de puntos"*, *"el cliente cambió la regla de canjes"*). El
+   (_"quiero arrancar una feature de export a Excel"_, _"retomemos lo
+   de saldo de puntos"_, _"el cliente cambió la regla de canjes"_). El
    Service Agent detecta intención y propone el slash command
    apropiado (ver `.claude/commands/`). El dev **no** necesita
    memorizar los slash commands.
@@ -100,11 +114,11 @@ Detalles adicionales en `stack/patterns.md` § *Commits*.
 
 Cuando la conversación toca coordinación cross-service (otro equipo,
 otro repo, contrato nuevo cross-team), el Service Agent **escala al
-Architect Agent** — no improvisa decisiones cross-team (§3.8 *no
-coordinator*). En la práctica:
+Architect Agent** — no improvisa decisiones cross-team (§3.8 _no
+coordinator_). En la práctica:
 
-> *"Esto toca al equipo de `<otro-equipo>`. Voy a consultar al Architect
-> Agent para draftear el contrato. ¿OK?"*
+> _"Esto toca al equipo de `<otro-equipo>`. Voy a consultar al Architect
+> Agent para draftear el contrato. ¿OK?"_
 
 ### Protocolo operacional (cada slash command lo hereda)
 
@@ -129,23 +143,30 @@ coordinator*). En la práctica:
 > protocolo §7 (este archivo) y de §11 del methodology. Si trabajas con
 > Cursor, Codex CLI u otro agente: el comportamiento sigue funcionando
 > sin esos archivos — sólo pierdes el autocompletado. Para generar los
-> atajos equivalentes de tu herramienta, pídeselo al agente: *"genera
-> los slash commands en formato Cursor a partir de AGENTS.md"*.
+> atajos equivalentes de tu herramienta, pídeselo al agente: _"genera
+> los slash commands en formato Cursor a partir de AGENTS.md"_.
 
 Comandos disponibles (ver `.claude/commands/` para los atajos Claude Code):
 
-| Comando | Cuándo |
-|---|---|
-| `/spec-new <slug>` | Bootstrap de una nueva feature con entrevista guiada |
-| `/spec-implement <slug>` | Avanzar la siguiente task pending |
-| `/spec-status <slug>` | Resumen legible del estado (read-only) |
-| `/spec-verify <slug>` | Auditar cobertura R*.* ↔ tests, gaps, drift |
-| `/spec-amend <slug>` | Cambio post-aprobación (cliente / legal / negocio) |
-| `/spec-handoff <slug>` | Transferir ownership a otro dev |
-| `/spec-promote <slug> --to <env>` | Abrir PR de promoción (pruebas → qa → main) |
-| `/bug-triage <descripción>` | Clasificar bug A/B/C/D/E |
-| `/ado-link <pr> <wi>` | Vincular PR a work item de ADO |
-| `/ado-status <pipeline>` | Estado de un pipeline |
+| Comando                           | Cuándo                                               | Condicionado a `repo-config.yaml`                                    |
+| --------------------------------- | ---------------------------------------------------- | -------------------------------------------------------------------- |
+| `/spec-new <slug>`                | Bootstrap de una nueva feature con entrevista guiada | siempre                                                              |
+| `/spec-implement <slug>`          | Avanzar la siguiente task pending                    | siempre                                                              |
+| `/spec-status <slug>`             | Resumen legible del estado (read-only)               | siempre                                                              |
+| `/spec-verify <slug>`             | Auditar cobertura R*.* ↔ tests, gaps, drift          | siempre                                                              |
+| `/spec-amend <slug>`              | Cambio post-aprobación (cliente / legal / negocio)   | siempre                                                              |
+| `/spec-handoff <slug>`            | Transferir ownership a otro dev                      | siempre                                                              |
+| `/spec-promote <slug> --to <env>` | Abrir PR de promoción al siguiente ambiente          | siempre — la lista de `<env>` válidos viene de `environments[].name` |
+| `/bug-triage <descripción>`       | Clasificar bug A/B/C/D/E                             | siempre                                                              |
+| `/ado-link <pr> <wi>`             | Vincular PR a work item de ADO                       | sólo si `tracker: azure-devops`                                      |
+| `/ado-status <pipeline>`          | Estado de un pipeline de ADO                         | sólo si `tracker: azure-devops` y/o CI hospedado en ADO              |
+
+> **Aplicabilidad por stack**: los slash commands con prefijo
+> específico (`/ado-*`, `/oc-*`, `/figma-*`) sólo se ofrecen si el repo
+> declara el stack correspondiente en `repo-config.yaml`. El Service
+> Agent **no propone** comandos que no apliquen y **no falla
+> silenciosamente** — explica por qué un comando solicitado no aplica
+> y propone la alternativa equivalente.
 
 ---
 
@@ -157,8 +178,8 @@ Estas reglas aplican a **toda** invocación del Service Agent
 - **Verificar antes de implementar**: si `/spec-implement` no encuentra
   spec aprobada, **para y pregunta** — no improvisa.
 - **Detectar el "ya pasó algo"**: si hay commits desde el último update
-  de `status.md`, el agente lo señala — *"veo N commits sin reflejo en
-  status.md, ¿los integro al lifecycle?"*.
+  de `status.md`, el agente lo señala — _"veo N commits sin reflejo en
+  status.md, ¿los integro al lifecycle?"_.
 - **Detectar drift**: si la derivación del estado de feature (§6
   Lifecycle) no coincide con el `state:` declarado, lo dice y propone
   alinearlos.
@@ -216,8 +237,10 @@ los anti-patrones más críticos como recordatorio explícito.
 ## Referencias
 
 - Metodología: `<path-al-doc-AI-DLC>/ai-dlc-methodology.md` (fuente de
-  verdad de §6 specs, §7 agentes, §11 slash commands).
+  verdad de §6 specs + §6 _Configuración del repo_, §7 agentes, §11
+  slash commands).
 - Stack: `stack/` (este repo).
-- Branch flow: `branch-flow.md`.
+- Repo config: `repo-config.yaml` (incluye branch flow, tracker,
+  runtime — §6 _Configuración del repo_ del methodology).
 - Specs activas: `specs/`.
 - Catálogo / contratos compartidos: `.org/` (si aplica cross-repo).

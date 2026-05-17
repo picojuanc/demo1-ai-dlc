@@ -1,9 +1,19 @@
 ---
-description: Estado de un pipeline de Azure DevOps
+description: Estado de un pipeline de Azure DevOps (sólo si tracker=azure-devops o runtime usa ADO Pipelines)
+---
+
+**Aplicabilidad**: este comando aplica **sólo si**
+`repo-config.yaml > tracker: azure-devops` **o** el CI/CD del repo
+corre en ADO Pipelines (§6 _Configuración del repo_ del methodology).
+Si no aplica, proponer el equivalente (`/gh-status` para GitHub
+Actions, `/gitlab-status` para GitLab CI, etc.) o reportar que el
+estado del pipeline debe consultarse manualmente.
+
 ---
 
 Para pipeline $PIPELINE_ID:
 
+0. **Leer `repo-config.yaml`** y verificar que ADO Pipelines aplica.
 1. `az pipelines runs list --pipeline-id $PIPELINE_ID --top 5`.
 2. Reportar:
    - Última run: status (succeeded / failed / in-progress) y duración.
