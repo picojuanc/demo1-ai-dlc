@@ -33,13 +33,13 @@ $TO_ENV:
      verdes + version bump prerelease + changelog. NO hay
      "ambiente" — el publish al registry **es** el deploy.
    - PR a `main` (`deploy_trigger: publish-release`): state
-     `feature-complete` + QA del consumidor firmó sobre el prerelease
-     - release notes + tag firmado.
+     `feature-complete`, QA del consumidor firmó sobre el prerelease,
+     release notes y tag firmado.
 
    **`repo_type: infra`** (sandbox → prod):
    - PR a `sandbox`: `terraform plan` dry-run + revisión.
-   - PR a `prod`: state `feature-complete` + `terraform plan` revisado
-     - Ops sign-off + ventana de cambio si aplica.
+   - PR a `prod`: state `feature-complete`, `terraform plan` revisado,
+     Ops sign-off y ventana de cambio si aplica.
 
    **`repo_type: frontend-app`**: igual a `service` salvo que también
    considera previews por PR si están declarados.
