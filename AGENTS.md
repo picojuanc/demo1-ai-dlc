@@ -18,7 +18,7 @@
 **Stack**: ver `stack/tech-stack.md`
 **Runtime**: ver `stack/tech-stack.md`
 **Deploy target**: TBD (deploy target sin decidir — ver `stack/tech-stack.md` § Deploy target)
-**Repo config**: `repo-config.yaml` (repo*type, tracker, environments, promotion_path — §6 \_Configuración del repo* del methodology)
+**Repo config**: `repo-config.yaml` (`repo_type`, `tracker`, `environments`, `promotion_path` — §6 _Configuración del repo_ del methodology)
 **On-call**: TBD
 
 ---
