@@ -3,7 +3,8 @@ description: Transferir ownership de una feature a otro dev (rotación, baja)
 ---
 
 Ejecuta el flujo canónico de `/spec-handoff` definido en
-`AGENTS.md` § *Slash commands disponibles* → *Definiciones canónicas*
-→ `/spec-handoff` para la feature `$ARGUMENTS`.
+`.agents/commands/spec-handoff.md`. Sigue los pasos definidos ahí
+literalmente para los argumentos `$ARGUMENTS`.
 
-Si AGENTS.md no contiene esa sección, **parar y reportar**.
+Si `.agents/commands/spec-handoff.md` no existe o no podés leerlo, **parar
+y reportar**.

@@ -3,9 +3,8 @@ description: Abrir PR de promoción al siguiente ambiente declarado en repo-conf
 ---
 
 Ejecuta el flujo canónico de `/spec-promote` definido en
-`AGENTS.md` § *Slash commands disponibles* → *Definiciones canónicas*
-→ `/spec-promote` para la feature `$ARGUMENTS`. Lee `repo-config.yaml`
-para conocer `repo_type`, `tracker`, `environments` y `promotion_path`
-— NO asumir `pruebas/qa/main` por reflejo.
+`.agents/commands/spec-promote.md`. Sigue los pasos definidos ahí
+literalmente para los argumentos `$ARGUMENTS`.
 
-Si AGENTS.md o `repo-config.yaml` no existen, **parar y reportar**.
+Si `.agents/commands/spec-promote.md` no existe o no podés leerlo, **parar
+y reportar**.

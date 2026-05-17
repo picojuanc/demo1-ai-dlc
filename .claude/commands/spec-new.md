@@ -3,9 +3,8 @@ description: Iniciar una feature spec con entrevista guiada
 ---
 
 Ejecuta el flujo canónico de `/spec-new` definido en
-`AGENTS.md` § *Slash commands disponibles* → *Definiciones canónicas*
-→ `/spec-new`. Sigue los pasos (CONTEXT, WORKTREE, CLARIFY, PROPOSE,
-EXECUTE, CLOSE) literalmente para la feature `$ARGUMENTS`.
+`.agents/commands/spec-new.md`. Sigue los pasos definidos ahí
+literalmente para los argumentos `$ARGUMENTS`.
 
-Si AGENTS.md no contiene esa sección o no la podés leer, **parar y
-reportar** — no improvisar.
+Si `.agents/commands/spec-new.md` no existe o no podés leerlo, **parar
+y reportar**.

@@ -3,8 +3,8 @@ description: Estado de un pipeline de Azure DevOps (sólo si tracker=azure-devop
 ---
 
 Ejecuta el flujo canónico de `/ado-status` definido en
-`AGENTS.md` § *Slash commands disponibles* → *Definiciones canónicas*
-→ `/ado-status`. Argumento: `$ARGUMENTS` = `<pipeline-id>`.
+`.agents/commands/ado-status.md`. Sigue los pasos definidos ahí
+literalmente para los argumentos `$ARGUMENTS`.
 
-Aplica **sólo si** `repo-config.yaml > tracker: azure-devops` o el
-CI/CD corre en ADO Pipelines. Si no aplica, proponer equivalente.
+Si `.agents/commands/ado-status.md` no existe o no podés leerlo, **parar
+y reportar**.
