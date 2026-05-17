@@ -1,4 +1,4 @@
-# repo-config.yaml — demo1-ai-dlc
+# repo-config.yaml — {{SERVICE_NAME}}
 #
 # Configuración operacional del repo. **Fuente de verdad** para tipo
 # de repo, tracker de work items, ambientes desplegables y flujo de

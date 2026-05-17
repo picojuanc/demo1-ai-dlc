@@ -1,4 +1,4 @@
-# AGENTS.md — demo1-ai-dlc
+# AGENTS.md — {{SERVICE_NAME}}
 
 > Instrucciones canónicas para el Service Agent de este repo.
 >
@@ -12,8 +12,8 @@
 
 ## Project
 
-**Service**: `demo1-ai-dlc`
-**Owner**: `PENTAI` (lead: `jpico@syc.com.co`)
+**Service**: `{{SERVICE_NAME}}`
+**Owner**: `{{OWNER_TEAM}}` (lead: `{{LEAD_EMAIL}}`)
 **Initiative**: `NONE`
 **Stack**: ver `stack/tech-stack.md`
 **Runtime**: ver `stack/tech-stack.md`
@@ -114,16 +114,16 @@ actual del demo), omitirlo. Con otro tracker (`github-issues`, `jira`,
 
 ```
 # tracker: none (estado actual)
-<type>(demo1-ai-dlc): T<n> - <desc> [R<x>.<y>]
+<type>({{SERVICE_NAME}}): T<n> - <desc> [R<x>.<y>]
 
 # tracker: azure-devops
-<type>(demo1-ai-dlc): T<n> - <desc> [R<x>.<y>] AB#<workitem-id>
+<type>({{SERVICE_NAME}}): T<n> - <desc> [R<x>.<y>] AB#<workitem-id>
 ```
 
 Ejemplos:
 ```
-feat(demo1-ai-dlc): T1 - <descripción corta> [R1.3, R5.1]
-feat(demo1-ai-dlc): T1 - <descripción corta> [R1.3, R5.1] AB#12347
+feat({{SERVICE_NAME}}): T1 - <descripción corta> [R1.3, R5.1]
+feat({{SERVICE_NAME}}): T1 - <descripción corta> [R1.3, R5.1] AB#12347
 ```
 
 Detalles adicionales en `stack/patterns.md` § *Commits*.
