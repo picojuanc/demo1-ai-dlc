@@ -3,9 +3,8 @@ description: Vincular un PR a uno o más work items de Azure DevOps (sólo si tr
 ---
 
 Ejecuta el flujo canónico de `/ado-link` definido en
-`AGENTS.md` § _Slash commands disponibles_ → _Definiciones canónicas_
-→ `/ado-link`. Argumentos: `$ARGUMENTS` = `<pr-id> <wi-ids>`.
+`.agents/commands/ado-link.md`. Sigue los pasos definidos ahí
+literalmente para los argumentos `$ARGUMENTS`.
 
-Aplica **sólo si** `repo-config.yaml > tracker: azure-devops`. Si no
-aplica, proponer el equivalente del tracker declarado o reportar que
-no existe todavía.
+Si `.agents/commands/ado-link.md` no existe o no podés leerlo, **parar
+y reportar**.

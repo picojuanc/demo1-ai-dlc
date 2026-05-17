@@ -3,10 +3,8 @@ description: Avanzar la siguiente task con pre-flight check
 ---
 
 Ejecuta el flujo canónico de `/spec-implement` definido en
-`AGENTS.md` § _Slash commands disponibles_ → _Definiciones canónicas_
-→ `/spec-implement`. Sigue los pasos (CONTEXT, PRE-FLIGHT CHECK,
-CLARIFY, PROPOSE, EXECUTE, UPDATE STATUS, CLOSE) literalmente para
-la feature `$ARGUMENTS`.
+`.agents/commands/spec-implement.md`. Sigue los pasos definidos ahí
+literalmente para los argumentos `$ARGUMENTS`.
 
-Si AGENTS.md no contiene esa sección o no la podés leer, **parar y
-reportar** — no improvisar.
+Si `.agents/commands/spec-implement.md` no existe o no podés leerlo, **parar
+y reportar**.

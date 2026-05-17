@@ -3,8 +3,8 @@ description: Cambio de spec post-aprobación (cliente, regulación, negocio)
 ---
 
 Ejecuta el flujo canónico de `/spec-amend` definido en
-`AGENTS.md` § _Slash commands disponibles_ → _Definiciones canónicas_
-→ `/spec-amend` para la feature `$ARGUMENTS`. Recordá: un Amendment
-NO es un bug Tipo B (§8).
+`.agents/commands/spec-amend.md`. Sigue los pasos definidos ahí
+literalmente para los argumentos `$ARGUMENTS`.
 
-Si AGENTS.md no contiene esa sección, **parar y reportar**.
+Si `.agents/commands/spec-amend.md` no existe o no podés leerlo, **parar
+y reportar**.
