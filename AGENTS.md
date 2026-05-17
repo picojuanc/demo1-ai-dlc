@@ -47,9 +47,9 @@ encontrás un archivo desconocido en otra ubicación, es código del
 proyecto.
 
 **Reglas de mantenimiento del inventario**:
-- Cuando agregues un nuevo slash command: archivo en
-  `.agents/commands/<name>.md` + wrapper en `.claude/commands/<name>.md`
-  + entrada en la tabla de §*Slash commands disponibles* abajo.
+- Cuando agregues un nuevo slash command: crear archivo en
+  `.agents/commands/<name>.md`, wrapper en `.claude/commands/<name>.md`,
+  y entrada en la tabla de §*Slash commands disponibles* abajo.
 - Cuando agregues una nueva skill: bajo `.agents/skills/<name>/SKILL.md`.
 - Cuando agregues una nueva sección a este AGENTS.md: aparece
   automáticamente, no requiere update de tabla.
