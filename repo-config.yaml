@@ -76,3 +76,31 @@ runtime:
 # feature_flags:
 #   default_at_merge_to_main: OFF
 #   cleanup_after_days_at_100pct: 90
+
+# ─── Servidores MCP (Model Context Protocol) ────────────────────────
+# Lista declarativa de qué MCPs usa este repo y para qué. La config
+# técnica (command, args, env vars) vive en `.mcp.json` al root del
+# repo (estándar Claude Code; Cursor lee `.cursor/mcp.json`, Codex CLI
+# usa su propia ubicación — ver AGENTS.md § Servidores MCP).
+#
+# Para agregar un MCP nuevo (ej. SonarQube):
+#   1. Agregar entrada acá (name + purpose + when aplica)
+#   2. Configurar el server en `.mcp.json`
+#   3. Documentar env vars requeridas en `.env.example`
+#   4. (Opcional) Mencionar en AGENTS.md § Servidores MCP qué habilita
+#
+# Catálogo de MCPs comunes en §13 *Extensibilidad de MCPs* del
+# methodology (azure-devops, sonarqube, github, jira, postgres,
+# figma, slack, etc.).
+mcps: []
+# Ejemplos (descomentar y configurar según el repo):
+# mcps:
+#   - name: azure-devops
+#     purpose: "Sync con Azure Boards, PRs y Pipelines"
+#     enabled_when: "tracker: azure-devops"
+#   - name: sonarqube
+#     purpose: "Análisis de calidad de código y vulnerabilidades"
+#     docs: "https://docs.sonarsource.com/sonarqube/latest/"
+#   - name: figma
+#     purpose: "Lectura de diseños desde el servicio de diseño"
+#     enabled_when: "design_service declarado"
