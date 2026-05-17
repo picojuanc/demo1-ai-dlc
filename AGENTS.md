@@ -40,6 +40,7 @@ es código y assets del proyecto.
 | `stack/*.md` | Convenciones técnicas del proyecto: `tech-stack`, `architecture`, `patterns`, `security`, `constraints`, `testing` | siempre (lo lee el Service Agent al implementar) |
 | `specs/<feature>/` | Una carpeta por feature: `requirements.md`, `design.md`, `tasks.md`, `status.md`, `bugs.md`, `amendments.md`, `mocks/` | sólo la feature activa |
 | `.org/contracts/` | Contratos cross-repo (opcional — sólo si hay dependencias cross-repo, §9 del methodology) | sólo si hay D-N cross-repo |
+| `.mcp.json` | Config de servidores MCP (Model Context Protocol) usados por este repo — opcional, crear al agregar el primer MCP. Declarado en `repo-config.yaml > mcps` | sólo cuando el agente invoca un MCP |
 
 **Si encontrás un archivo nuevo en alguno de los paths de arriba**,
 pertenece a la metodología y debería estar listado en esta tabla. Si
@@ -242,18 +243,47 @@ Estas reglas aplican a **toda** invocación del Service Agent
 
 ## Servidores MCP configurados
 
-MCPs (Model Context Protocol) son **agnósticos de tool**: la
-configuración es un JSON estándar que Claude Code, Cursor y otros leen.
-Ubicación de configuración por tool:
+MCPs (Model Context Protocol) son **agnósticos de protocolo**: el
+formato del config es JSON estándar (`{ "mcpServers": { ... } }`) que
+todas las tools agente entienden. Las **ubicaciones** difieren por tool:
 
-- Claude Code: `.claude/mcp.json` (no creado todavía).
-- Cursor: `.cursor/mcp.json` o configuración global.
-- Codex CLI: variables de entorno o `~/.codex/config.json`.
+| Tool | Ubicación del config |
+|---|---|
+| Claude Code | `.mcp.json` al root del repo (canonical) o `~/.claude/settings.json` (user-level) |
+| Cursor | `.cursor/mcp.json` (proyecto) o config global |
+| Codex CLI | `~/.codex/config.json` o variables de entorno |
 
-MCPs candidatos para este repo:
+**Lista declarativa de MCPs de este repo**: ver `repo-config.yaml >
+mcps`. Esa sección dice **qué** MCPs usa el repo y **por qué**; la
+config técnica (command, args, env vars) vive en `.mcp.json`.
 
-- **azure-devops** — consultar/crear work items, PRs, pipelines.
-- **figma** — sólo si el repo es frontend con dependencia de diseño.
+**Para agregar un MCP nuevo** (ej. SonarQube, GitHub, PostgreSQL):
+
+1. Agregar entrada en `repo-config.yaml > mcps` (name + purpose +
+   `enabled_when` si aplica condicionalmente).
+2. Configurar el server en `.mcp.json`:
+   ```json
+   {
+     "mcpServers": {
+       "sonarqube": {
+         "command": "npx",
+         "args": ["-y", "@sonarqube/mcp-server"],
+         "env": {
+           "SONARQUBE_URL": "${env:SONARQUBE_URL}",
+           "SONARQUBE_TOKEN": "${env:SONARQUBE_TOKEN}"
+         }
+       }
+     }
+   }
+   ```
+3. Documentar env vars requeridas en `.env.example` (sin secretos
+   reales — sólo los nombres).
+4. (Si aplica) Crear `.cursor/mcp.json` con el mismo contenido para
+   compañeros con Cursor (mismo formato).
+
+Ver §13 *Extensibilidad de MCPs* del methodology para el **catálogo
+de MCPs comunes** (azure-devops, sonarqube, github, jira, postgres,
+figma, slack, etc.).
 
 ---
 
